@@ -1,0 +1,19 @@
+.auth {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &__title {
+        text-align: center;
+    }
+
+    &__button {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    &__bottom {
+        text-align: center;
+    }
+}
