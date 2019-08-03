@@ -16,4 +16,10 @@
     &__bottom {
         text-align: center;
     }
+
+    &__error {
+        text-align: center;
+        color: red;
+        margin-bottom: 1rem;
+    }
 }
