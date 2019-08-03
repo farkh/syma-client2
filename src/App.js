@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { Container } from 'react-bootstrap';
 import jwtDecode from 'jwt-decode';
 
 import Auth from './components/Auth/Auth';
@@ -23,12 +22,10 @@ const App = () => {
   return (
     <Provider store={store}>
       <Router>
-        <Container fluid>
-          <Switch>
-            <Route exact path={routes.AUTH} component={() => <Auth />} />
-            <Route exact path={routes.TRANSACTIONS} component={() => <Transactions />} />
-          </Switch>
-        </Container>
+        <Switch>
+          <Route exact path={routes.AUTH} component={() => <Auth />} />
+          <Route exact path={routes.TRANSACTIONS} component={() => <Transactions />} />
+        </Switch>
       </Router>
     </Provider>
   );

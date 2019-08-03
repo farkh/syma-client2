@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import Layout from '../Layout/Layout';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 import { API_BASE_URI } from '../../constants/uri';
 
@@ -54,7 +55,7 @@ const Transactions = (props) => {
     }, []);
     
     return (
-        <div className="transactions">
+        <Layout contentClassName="transactions">
             <LoadingOverlay show={isLoading} text="Loading..." />
             
             <h1>My transactions</h1>
@@ -67,7 +68,7 @@ const Transactions = (props) => {
                     </li>
                 ))}
             </ul>
-        </div>
+        </Layout>
     );
 };
 
