@@ -3,16 +3,15 @@ import thunk from 'redux-thunk';
 
 import rootReducer from './reducers';
 
-const persistedState = localStorage.getItem('SymaState')
-	? JSON.parse(localStorage.getItem('SymaState'))
-	: {};
+const initialState = {};
 const middleware = [thunk];
 
 const store = createStore(
 	rootReducer,
-	persistedState,
+	initialState,
 	compose(
-		applyMiddleware(...middleware)
+		applyMiddleware(...middleware),
+		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 	),
 );
 

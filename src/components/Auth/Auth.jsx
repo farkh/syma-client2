@@ -9,6 +9,7 @@ import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 import { setCurrentUser } from '../../redux/actions/auth.actions';
 import { API_BASE_URI } from '../../constants/uri';
 import { setCookie } from '../../services/cookies';
+import { setAuthToken } from '../../services/auth';
 import './auth.scss';
 
 class Auth extends Component {
@@ -83,6 +84,7 @@ class Auth extends Component {
 
                 this.props.setCurrentUser({ _id, token, tokenExpiration, email });
                 setCookie('token', token, { expires: tokenExpiration * 3600 });
+                setAuthToken(token);
                 this.props.history.push('/');
             }
         } catch (err) {
@@ -120,6 +122,7 @@ class Auth extends Component {
 
                 this.props.setCurrentUser({ _id, token, tokenExpiration, email });
                 setCookie('token', token, { expires: tokenExpiration * 3600 });
+                setAuthToken(token);
                 this.props.history.push('/');
             }
         } catch (err) {
