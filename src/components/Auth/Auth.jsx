@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
+import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
+
 import { setCurrentUser } from '../../redux/actions/auth.actions';
 import { API_BASE_URI } from '../../constants/uri';
 import { setCookie } from '../../services/cookies';
@@ -132,6 +134,8 @@ class Auth extends Component {
         
         return (
             <div className="auth">
+                <LoadingOverlay show={isLoading} text="Loading..." />
+                
                 <Row>
                     <Col md={{ span: 6, offset: 3 }}>
                         <h1 className="auth__title">{isLogin ? 'Log in' : 'Sign up'}</h1>
