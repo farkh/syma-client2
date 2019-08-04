@@ -36,6 +36,13 @@ const Navigation = (props) => {
                     >
                         Transactions
                     </NavLink>
+                    <NavLink
+                        to="/settings"
+                        className="navbar__link"
+                        activeClassName="navbar__link--active"
+                    >
+                        Settings
+                    </NavLink>
                 </Nav>
 
                 <Nav className="ml-auth">

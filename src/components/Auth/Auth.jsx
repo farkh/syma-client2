@@ -156,7 +156,7 @@ const Auth = (props) => {
                 dispatch(setCurrentUser({ _id, token, tokenExpiration, email }));
                 setCookie('token', token, { expires: tokenExpiration * 3600 });
                 setAuthToken(token);
-                props.history.push(routes.HOME);
+                props.history.push(routes.USER_SETTINGS);
             }
         } catch (err) {
             setState(prevState => ({
