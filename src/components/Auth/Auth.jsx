@@ -10,6 +10,7 @@ import { setCurrentUser } from '../../redux/actions/auth.actions';
 import { API_BASE_URI } from '../../constants/uri';
 import { setCookie } from '../../services/cookies';
 import { setAuthToken } from '../../services/auth';
+import routes from '../../constants/routes';
 import './auth.scss';
 
 const initialState = {
@@ -39,7 +40,7 @@ const Auth = (props) => {
     const { authUser } = authState;
 
     useEffect(() => {
-        if (authUser) props.history.push('/');
+        if (authUser) props.history.push(routes.HOME);
         
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -110,7 +111,7 @@ const Auth = (props) => {
                 dispatch(setCurrentUser({ _id, token, tokenExpiration, email }));
                 setCookie('token', token, { expires: tokenExpiration * 3600 });
                 setAuthToken(token);
-                props.history.push('/');
+                props.history.push(routes.HOME);
             }
         } catch (err) {
             setState(prevState => ({
@@ -155,7 +156,7 @@ const Auth = (props) => {
                 dispatch(setCurrentUser({ _id, token, tokenExpiration, email }));
                 setCookie('token', token, { expires: tokenExpiration * 3600 });
                 setAuthToken(token);
-                props.history.push('/');
+                props.history.push(routes.USER_SETTINGS);
             }
         } catch (err) {
             setState(prevState => ({
