@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { Navbar, Nav } from 'react-bootstrap';
 
@@ -25,17 +25,39 @@ const Navigation = (props) => {
     
     return (
         <Navbar fixed="top" bg="dark" variant="dark">
-            <Navbar.Brand href="/">SYMA</Navbar.Brand>
+            <NavLink to="/"><Navbar.Brand>SYMA</Navbar.Brand></NavLink>
 
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/transactions">Transactions</Nav.Link>
+                    <NavLink
+                        to="/transactions"
+                        className="navbar__link"
+                        activeClassName="navbar__link--active"
+                    >
+                        Transactions
+                    </NavLink>
                 </Nav>
 
                 <Nav className="ml-auth">
-                    {authUser && <Nav.Link href="/logout" onClick={logout}>Logout</Nav.Link>}
-                    {!authUser && <Nav.Link href="/auth">Login</Nav.Link>}
+                    {authUser &&
+                        <NavLink
+                            to="/lougout"
+                            onClick={logout}
+                            className="navbar__link"
+                            activeClassName="navbar__link--active"
+                        >
+                            Logout
+                        </NavLink>
+                    }
+                    {!authUser &&
+                        <NavLink
+                            to="/auth"
+                            className="navbar__link"
+                            activeClassName="navbar__link--active"
+                        >
+                            Login
+                        </NavLink>
+                    }
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

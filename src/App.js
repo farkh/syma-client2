@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode';
 
 import Auth from './components/Auth/Auth';
 import Transactions from './components/Transactions/Transactions';
+import Home from './components/Home/Home';
 
 import { setCurrentUser } from './redux/actions/auth.actions';
 import { setAuthToken } from './services/auth';
@@ -22,6 +23,7 @@ const App = () => {
   return (
     <Router>
       <Switch>
+        <Route exact path={routes.HOME} component={() => <Home />} />
         <Route exact path={routes.AUTH} component={() => <Auth />} />
         <Route exact path={routes.TRANSACTIONS} component={() => <Transactions />} />
       </Switch>
