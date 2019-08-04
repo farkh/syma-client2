@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useMappedState } from 'redux-react-hook';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
@@ -12,55 +12,76 @@ import { setCookie } from '../../services/cookies';
 import { setAuthToken } from '../../services/auth';
 import './auth.scss';
 
-class Auth extends Component {
-    state = {
-        isLogin: true,
-        email: '',
-        username: '',
-        password: '',
-        confirm: '',
-        isLoading: false,
-        error: null,
-    };
-    
-    componentDidMount() {
-        const { authState } = this.props;
+const initialState = {
+    isLogin: true,
+    email: '',
+    username: '',
+    password: '',
+    confirm: '',
+    isLoading: false,
+    error: null,
+};
 
-        if (authState.authUser) this.props.history.push('/');
-    }
+const Auth = (props) => {
+    const dispatch = useDispatch();
+    const [
+        { isLogin, email, username, password, confirm, isLoading, error },
+        setState,
+    ] = useState(initialState);
 
-    toggleAuthType = (e) => {
+    console.log('islogin', isLogin, email, username, password, confirm, isLoading, error);
+
+    const mapState = useCallback((state) => ({
+        authState: state.auth,
+    }), []);
+
+    const { authState } = useMappedState(mapState);
+    const { authUser } = authState;
+
+    useEffect(() => {
+        if (authUser) props.history.push('/');
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const toggleAuthType = (e) => {
         e.preventDefault();
 
-        this.setState(prevState => ({
+        setState(prevState => ({
+            ...prevState,
             isLogin: !prevState.isLogin,
             isLoading: false,
             error: null,
         }));
     };
-    
-    handleInputChange = (e) => {
+
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
 
-        this.setState({ [name]: value, error: null });
+        setState(prevState => ({
+            ...prevState,
+            [name]: value,
+            error: null,
+        }));
     };
 
-    handleFormSubmit = (e) => {
+    const handleFormSubmit = (e) => {
         e.preventDefault();
-        const { isLogin } = this.state;
 
-        this.setState({ isLoading: true });
+        setState(prevState => ({
+            ...prevState,
+            isLoading: true,
+        }));
 
         if (isLogin) {
-            this.handleLogin();
+            handleLogin();
             return;
         }
 
-        this.handleSignUp();
+        handleSignUp();
     };
 
-    handleLogin = async () => {
-        const { email, password } = this.state;
+    const handleLogin = async () => {
         const requestBody = {
             query: `
                 query {
@@ -78,22 +99,29 @@ class Auth extends Component {
             const { data } = await axios.post(API_BASE_URI, requestBody);
 
             if (data.errors) {
-                this.setState({ isLoading: false, error: data.errors[0].message });
+                setState(prevState => ({
+                    ...prevState,
+                    isLoading: false,
+                    error: data.errors[0].message,
+                }));
             } else {
                 const { _id, token, tokenExpiration } = data.data.login;
 
-                this.props.setCurrentUser({ _id, token, tokenExpiration, email });
+                dispatch(setCurrentUser({ _id, token, tokenExpiration, email }));
                 setCookie('token', token, { expires: tokenExpiration * 3600 });
                 setAuthToken(token);
-                this.props.history.push('/');
+                props.history.push('/');
             }
         } catch (err) {
-            this.setState({ isLoading: false, error: err });
+            setState(prevState => ({
+                ...prevState,
+                isLoading: false,
+                error: err,
+            }));
         }
     };
 
-    handleSignUp = async () => {
-        const { email, username, password, confirm } = this.state;
+    const handleSignUp = async () => {
         const requestBody = {
             query: `
                 mutation {
@@ -116,111 +144,109 @@ class Auth extends Component {
             const { data } = await axios.post(API_BASE_URI, requestBody);
 
             if (data.errors) {
-                this.setState({ isLoading: false, error: data.errors[0].message });
+                setState(prevState => ({
+                    ...prevState,
+                    isLoading: false,
+                    error: data.errors[0].message,
+                }));
             } else {
                 const { _id, token, tokenExpiration } = data.data.createUser;
 
-                this.props.setCurrentUser({ _id, token, tokenExpiration, email });
+                dispatch(setCurrentUser({ _id, token, tokenExpiration, email }));
                 setCookie('token', token, { expires: tokenExpiration * 3600 });
                 setAuthToken(token);
-                this.props.history.push('/');
+                props.history.push('/');
             }
         } catch (err) {
-            this.setState({ isLoading: false, error: err });
+            setState(prevState => ({
+                ...prevState,
+                isLoading: false,
+                error: err,
+            }));
         }
     };
-    
-    render() {
-        const {
-            isLogin, email, username, password, confirm, isLoading, error,
-        } = this.state;
-        
-        return (
-            <div className="auth">
-                <LoadingOverlay show={isLoading} text="Loading..." />
-                
-                <Row>
-                    <Col md={{ span: 6, offset: 3 }}>
-                        <h1 className="auth__title">{isLogin ? 'Log in' : 'Sign up'}</h1>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={{ span: 6, offset: 3 }}>
-                        <Form className="auth__form" onSubmit={this.handleFormSubmit}>
+
+    return (
+        <div className="auth">
+            <LoadingOverlay show={isLoading} text="Loading..." />
+            
+            <Row>
+                <Col md={{ span: 6, offset: 3 }}>
+                    <h1 className="auth__title">{isLogin ? 'Log in' : 'Sign up'}</h1>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={{ span: 6, offset: 3 }}>
+                    <Form className="auth__form" onSubmit={handleFormSubmit}>
+                        <Form.Group>
+                            <Form.Label htmlFor="email">Email address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                id="email"
+                                placeholder="Enter email"
+                                value={email}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        {!isLogin && (
                             <Form.Group>
-                                <Form.Label htmlFor="email">Email address</Form.Label>
+                                <Form.Label htmlFor="username">Username</Form.Label>
                                 <Form.Control
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    placeholder="Enter email"
-                                    value={email}
-                                    onChange={this.handleInputChange}
+                                    type="text"
+                                    name="username"
+                                    id="username"
+                                    placeholder="Username"
+                                    value={username}
+                                    onChange={handleInputChange}
                                 />
                             </Form.Group>
-                            {!isLogin && (
-                                <Form.Group>
-                                    <Form.Label htmlFor="username">Username</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="username"
-                                        id="username"
-                                        placeholder="Username"
-                                        value={username}
-                                        onChange={this.handleInputChange}
-                                    />
-                                </Form.Group>
-                            )}
+                        )}
+                        <Form.Group>
+                            <Form.Label htmlFor="password">Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                name="password"
+                                id="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        {!isLogin && (
                             <Form.Group>
-                                <Form.Label htmlFor="password">Password</Form.Label>
+                                <Form.Label htmlFor="confirm">Password</Form.Label>
                                 <Form.Control
                                     type="password"
-                                    name="password"
-                                    id="password"
-                                    placeholder="Password"
-                                    value={password}
-                                    onChange={this.handleInputChange}
+                                    name="confirm"
+                                    id="confirm"
+                                    placeholder="Confirm password"
+                                    value={confirm}
+                                    onChange={handleInputChange}
                                 />
                             </Form.Group>
-                            {!isLogin && (
-                                <Form.Group>
-                                    <Form.Label htmlFor="confirm">Password</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="confirm"
-                                        id="confirm"
-                                        placeholder="Confirm password"
-                                        value={confirm}
-                                        onChange={this.handleInputChange}
-                                    />
-                                </Form.Group>
-                            )}
+                        )}
 
-                            <div className="auth__error">{error}</div>
+                        <div className="auth__error">{error}</div>
 
-                            <Button
-                                variant="primary"
-                                className="auth__button"
-                                onClick={this.handleFormSubmit}
-                            >
-                                {isLogin ? 'Log in' : 'Sign up'}
-                            </Button>
+                        <Button
+                            variant="primary"
+                            className="auth__button"
+                            onClick={handleFormSubmit}
+                        >
+                            {isLogin ? 'Log in' : 'Sign up'}
+                        </Button>
 
-                            <div className="auth__bottom">
-                                Or <a href="/signup" onClick={this.toggleAuthType}>
-                                    {isLogin ? 'sign up' : 'log in'} now.
-                                </a>
-                            </div>
-                        </Form>
-                    </Col>
-                </Row>
-            </div>
-        );
-    }
-}
+                        <div className="auth__bottom">
+                            Or <a href="/signup" onClick={toggleAuthType}>
+                                {isLogin ? 'sign up' : 'log in'} now.
+                            </a>
+                        </div>
+                    </Form>
+                </Col>
+            </Row>
+        </div>
+    );
+};
 
-const mapStateToProps = state => ({
-    authState: state.auth,
-});
-
-export default withRouter(connect(mapStateToProps, { setCurrentUser })(Auth));
+export default withRouter(Auth);
