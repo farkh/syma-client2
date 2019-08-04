@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useMappedState } from 'redux-react-hook';
 import axios from 'axios';
 
 import Layout from '../Layout/Layout';
@@ -8,12 +8,18 @@ import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 import { API_BASE_URI } from '../../constants/uri';
 
 const Transactions = (props) => {
-    const { authState } = props;
     const [transactions, setTransactions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const mapState = useCallback((state) => ({
+        authState: state.auth,
+    }), []);
 
+    const { authState } = useMappedState(mapState);
+
+    console.log('AUTH STATE', authState);
+        
     useEffect(() => {
-        if (!authState.authUser) props.history.push('/');
+        if (!authState.authUser) props.history.push('/auth');
         
         const getTransactions = async () => {
             const requestBody = {
@@ -52,6 +58,8 @@ const Transactions = (props) => {
         };
 
         getTransactions();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
     return (
@@ -72,8 +80,4 @@ const Transactions = (props) => {
     );
 };
 
-const mapStateToProps = state => ({
-    authState: state.auth,
-});
-
-export default withRouter(connect(mapStateToProps)(Transactions));
+export default withRouter(Transactions);
