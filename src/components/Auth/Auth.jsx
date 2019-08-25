@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { ReCaptcha } from 'react-recaptcha-v3';
 
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 
@@ -31,7 +32,16 @@ class Auth extends Component {
         confirm: '',
         isLoading: false,
         error: null,
+        recaptchaToken: '',
     };
+
+    componentDidMount() {
+        // if (this.captcha) {
+        //     console.log("started, just a second...")
+        //     this.captcha.reset();
+        //     this.captcha.execute();
+        // }
+    }
 
     handleFormSubmit = (e) => {
         if (e) e.preventDefault();
@@ -102,14 +112,32 @@ class Auth extends Component {
 
     isSubmitAvailable = () => {
         const {
-            isLogin, email, username, password, confirm,
+            isLogin, email, username, password, confirm, recaptchaToken,
         } = this.state;
 
         if (isLogin) {
             return email.length > 3 && password.length > 5;
         }
 
-        return email.length > 3 && username.length > 3 && password.length > 5 && password === confirm;
+        return email.length > 3 &&
+            username.length > 3 &&
+            password.length > 5 &&
+            password === confirm &&
+            recaptchaToken.length > 0;
+    };
+
+    onLoadRecaptcha = () => {
+        console.log('sadalskdjasl');
+        // if (this.captcha) {
+        //     console.log("started, just a second...")
+        //     this.captcha.reset();
+        //     this.captcha.execute();
+        // }
+    };
+
+    recaptchaCallback = (token, data) => {
+        console.log('token, data', token, data);
+        this.setState({ recaptchaToken: token });
     };
 
     render() {
@@ -119,6 +147,17 @@ class Auth extends Component {
         
         return (
             <div className="auth">
+                <ReCaptcha
+                    ref={(el) => {this.captcha = el;}}
+                    // size="invisible"
+                    size="normal"
+                    // render="explicit"
+                    data-theme="dark"
+                    sitekey="6LfCw7QUAAAAAA6CCnbia1BUBTeh1UJS_wJrD0N4"
+                    onloadCallback={this.onLoadRecaptcha}
+                    verifyCallback={this.recaptchaCallback}
+                />
+                
                 <LoadingOverlay show={isLoading} text="Loading..." />
                 
                 <Row>
