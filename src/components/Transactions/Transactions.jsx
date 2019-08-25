@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { useMappedState } from 'redux-react-hook';
 import axios from 'axios';
 
 import Layout from '../Layout/Layout';
@@ -10,14 +10,9 @@ import { API_BASE_URI } from '../../constants/uri';
 const Transactions = (props) => {
     const [transactions, setTransactions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const mapState = useCallback((state) => ({
-        authState: state.auth,
-    }), []);
 
-    const { authState } = useMappedState(mapState);
+    const { authState } = props;
 
-    console.log('AUTH STATE', authState);
-        
     useEffect(() => {
         if (!authState.authUser) props.history.push('/auth');
         
@@ -80,4 +75,8 @@ const Transactions = (props) => {
     );
 };
 
-export default withRouter(Transactions);
+const mapStateToProps = state => ({
+    authState: state.auth,
+});
+
+export default withRouter(connect(mapStateToProps)(Transactions));
