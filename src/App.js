@@ -1,6 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { useDispatch } from 'redux-react-hook';
 import jwtDecode from 'jwt-decode';
 
 import Auth from './components/Auth/Auth';
@@ -13,12 +13,11 @@ import { setAuthToken } from './services/auth';
 import { getCookie } from './services/cookies';
 import routes from './constants/routes';
 
-const App = () => {
-  const dispatch = useDispatch();
+const App = (props) => {
   const token = getCookie('token');
   if (token) {
     setAuthToken(token);
-    dispatch(setCurrentUser(jwtDecode(token)));
+    props.setCurrentUser(jwtDecode(token));
   }
   
   return (
@@ -33,4 +32,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default connect(null, { setCurrentUser })(App);

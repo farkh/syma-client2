@@ -1,60 +1,71 @@
-import React, { useCallback } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { withRouter, NavLink } from 'react-router-dom';
-import { useMappedState, useDispatch } from 'redux-react-hook';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Dropdown } from 'react-bootstrap';
 
 import { setCurrentUser } from '../../redux/actions/auth.actions';
 import { deleteCookie } from '../../services/cookies';
+import routes from '../../constants/routes';
+
+import './navigation.scss';
 
 const Navigation = (props) => {
-    const dispatch = useDispatch();
-    const mapState = useCallback((state) => ({
-        authState: state.auth,
-    }), []);
-
-    const { authState } = useMappedState(mapState);
+    const { authState } = props;
     const { authUser } = authState;
 
     const logout = e => {
         e.preventDefault();
 
-        dispatch(setCurrentUser(null));
+        props.setCurrentUser(null);
         deleteCookie('token');
         props.history.push('/auth');
     };
     
     return (
         <Navbar fixed="top" bg="dark" variant="dark">
-            <NavLink to="/"><Navbar.Brand>SYMA</Navbar.Brand></NavLink>
+            <NavLink to={routes.HOME}><Navbar.Brand>SYMA</Navbar.Brand></NavLink>
 
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <NavLink
-                        to="/transactions"
+                        to={routes.TRANSACTIONS}
                         className="navbar__link"
                         activeClassName="navbar__link--active"
                     >
                         Transactions
                     </NavLink>
-                    <NavLink
-                        to="/settings"
-                        className="navbar__link"
-                        activeClassName="navbar__link--active"
-                    >
-                        Settings
-                    </NavLink>
                 </Nav>
 
                 <Nav className="ml-auth">
                     {authUser &&
-                        <NavLink
-                            to="/lougout"
-                            onClick={logout}
-                            className="navbar__link"
-                            activeClassName="navbar__link--active"
-                        >
-                            Logout
-                        </NavLink>
+                        <Dropdown>
+                            <Dropdown.Toggle
+                                variant="secondary"
+                                id="user-dropdown"
+                                className="user-dropdown__toggle"
+                            >
+                                <img
+                                    src={authUser.avatar}
+                                    className="user-dropdown__avatar"
+                                    alt="avatar"
+                                />
+                                {authUser.username}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item href={routes.USER_SETTINGS}>Settings</Dropdown.Item>
+
+                                <Dropdown.Divider />
+
+                                <Dropdown.Item
+                                    href={routes.LOGOUT}
+                                    onClick={logout}
+                                >
+                                    Logout
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+
+                        </Dropdown>
                     }
                     {!authUser &&
                         <NavLink
@@ -71,4 +82,8 @@ const Navigation = (props) => {
     );
 };
 
-export default withRouter(Navigation);
+const mapStateToProps = state => ({
+    authState: state.auth,
+});
+
+export default withRouter(connect(mapStateToProps, { setCurrentUser })(Navigation));

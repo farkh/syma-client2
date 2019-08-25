@@ -1,13 +1,10 @@
-import React, { useCallback } from 'react';
-import { useMappedState } from 'redux-react-hook';
+import React from 'react';
+import { connect } from 'react-redux';
 
 import Layout from '../Layout/Layout';
 
-const Home = () => {
-    const mapState = useCallback((state) => ({
-        authState: state.auth,
-    }), []);
-    const { authState } = useMappedState(mapState);
+const Home = (props) => {
+    const { authState } = props;
     const { authUser } = authState;
 
     if (!authUser) return (
@@ -23,4 +20,8 @@ const Home = () => {
     );
 };
 
-export default Home;
+const mapStateToProps = state => ({
+    authState: state.auth,
+});
+
+export default connect(mapStateToProps)(Home);

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useMappedState } from 'redux-react-hook';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 
@@ -17,7 +17,7 @@ const initialState = {
     total_required_expenses: 0,
 };
 
-const UserSettings = () => {
+const UserSettings = (props) => {
     const [
         {
             advanced_date,
@@ -31,10 +31,7 @@ const UserSettings = () => {
         },
         setState,
     ] = useState(initialState);
-    const mapState = useCallback((state) => ({
-        authState: state.auth,
-    }), []);
-    const { authState } = useMappedState(mapState);
+    const { authState } = props;
     const { authUser } = authState;
 
     useEffect(() => {
@@ -234,4 +231,8 @@ const UserSettings = () => {
     );
 };
 
-export default UserSettings;
+const mapStateToProps = state => ({
+    authState: state.auth,
+});
+
+export default connect(mapStateToProps)(UserSettings);

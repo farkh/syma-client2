@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { StoreContext } from 'redux-react-hook';
+// import { StoreContext } from 'redux-react-hook';
+import { Provider } from 'react-redux';
 
 import App from './App';
 import store from './redux/store';
 import './index.scss';
 
 ReactDOM.render(
-    <StoreContext.Provider value={store}>
+    <Provider store={store}>
         <App />
-    </StoreContext.Provider>,
+    </Provider>,
     document.getElementById('root'),
 );
