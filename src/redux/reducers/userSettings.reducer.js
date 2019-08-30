@@ -32,7 +32,7 @@ const userSettingsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                error: action.error,
+                error: action.error.data,
             };
         case UPDATE_USER_SETTINGS_PENDING:
             return {
@@ -50,7 +50,7 @@ const userSettingsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                error: action.error,
+                error: action.error.data,
             }
         default:
             return { ...state };

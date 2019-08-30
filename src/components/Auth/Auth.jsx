@@ -32,7 +32,11 @@ class Auth extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.state.isLogin && nextProps.auth.authUser) this.props.history.push(routes.HOME);
-        else if (nextProps.auth.authUser) this.props.history.push(routes.USER_SETTINGS);
+        else if (nextProps.auth.authUser) {
+            setTimeout(() => {
+                this.props.history.push(routes.USER_SETTINGS);
+            }, 200);
+        }
     }
 
     handleFormSubmit = (authData) => {

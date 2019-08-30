@@ -20,7 +20,7 @@ export const fetchUserSettingsAction = () => async dispatch => {
 
         return userSettings;
     } catch (error) {
-        const err = error.message ? error.message : error.toString();
+        const err = error.response ? error.response : { data: error.toString() };
         dispatch(fetchUserSettingsError(err));
     }
 };
@@ -34,7 +34,7 @@ export const updateUserSettingsAction = (userSettings) => async dispatch => {
 
         return updatedUserSettings;
     } catch (error) {
-        const err = error.message ? error.message : error.toString();
+        const err = error.response ? error.response : { data: error.toString() };
         dispatch(updateUserSettingsError(err));
     }
 };

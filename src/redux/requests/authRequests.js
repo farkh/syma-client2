@@ -46,7 +46,7 @@ export const registerAction = ({ email, username, password, confirm }) => async 
 
 const _setAuthUser = (token, dispatch) => {
     const user = jwtDecode(token);
-    dispatch(setCurrentUser(user));
     setCookie('token', token, { expires: 3600 });
+    dispatch(setCurrentUser(user));
     setAuthToken(token);
 };
