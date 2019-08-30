@@ -1,10 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
+import { catchUnauthorized } from './middleware/unauthorized';
 import rootReducer from './reducers';
 
 const initialState = {};
-const middleware = [thunk];
+const middleware = [thunk, catchUnauthorized];
 
 const store = createStore(
 	rootReducer,
