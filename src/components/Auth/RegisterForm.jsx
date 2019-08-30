@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Form, Button } from 'react-bootstrap';
 
+import { validateEmail } from '../../services/validators';
+
 const RegisterForm = ({ onFormSubmit, toggleAuthType, error }) => {
     const initialState = {
         email: '',
@@ -28,7 +30,7 @@ const RegisterForm = ({ onFormSubmit, toggleAuthType, error }) => {
     };
 
     const isSubmitAvailable = () => {
-        return email.length > 3 && username.length > 3 && password.length > 5 && password === confirm;
+        return validateEmail(email) && username.length > 3 && password.length > 5 && password === confirm;
     };
     
     return (
