@@ -6,7 +6,7 @@ export const catchUnauthorized = ({ dispatch }) => next => action => {
 		dispatch(setCurrentUser(null));
 		deleteCookie('token');
 		window.location = '/auth';
+	} else {
+		next(action);
 	}
-
-	next(action);
 };
