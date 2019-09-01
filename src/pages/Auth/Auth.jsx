@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Row, Col } from 'react-bootstrap';
 
-import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
+import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
 
 import { loginAction, registerAction } from '../../redux/requests/authRequests';
 import routes from '../../constants/routes';

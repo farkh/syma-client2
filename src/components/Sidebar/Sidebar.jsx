@@ -28,7 +28,7 @@ const Sidebar = (props) => {
 
 				<div
 					className={`sidebar__toggler ${sidebarCollapsed ? 'sidebar__toggler--expand' : ''}`}
-					title="Collapse"
+					title={sidebarCollapsed ? 'Expand' : 'Collapse'}
 					onClick={handleToggleSidebar}
 				/>
 			</div>
@@ -40,7 +40,7 @@ const Sidebar = (props) => {
 			<ul className="sidebar__menu">
 				<li className="sidebar__menu-item">
 					<NavLink
-						to={routes.HOME}
+						to={routes.DASHBOARD}
 						className="sidebar__link sidebar__link--dashboard"
 						activeClassName="sidebar__link--active"
 					>
