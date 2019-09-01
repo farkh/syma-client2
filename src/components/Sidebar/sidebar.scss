@@ -36,6 +36,11 @@
 		right: 15px;
 		top: calc(50% - 7px);
 
+		&--expand {
+			mask: url('../../media/arrow-right.svg');
+			mask-size: cover;
+		}
+
 		&:hover {
 			background-color: #ffffff;
 		}
@@ -50,6 +55,8 @@
 
 	&__link {
 		width: 100%;
+		height: 48px;
+		box-sizing: border-box;
 		padding: 12px 10px;
 		padding-left: 40px;
 		cursor: pointer;
@@ -104,6 +111,18 @@
 
 			&::before {
 				background-color: #ffffff;
+			}
+		}
+	}
+
+	&--collapsed {
+		.sidebar {
+			&__header {
+				padding-left: 25px;
+			}
+
+			&__link::before {
+				left: calc(50% - 10px);
 			}
 		}
 	}

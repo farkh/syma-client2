@@ -1,28 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import Navigation from '../Navigation/Navigation';
 import Sidebar from '../Sidebar/Sidebar';
 import './layout.scss';
 
-const Layout = ({ children, contentClassName }) => {
+const Layout = ({ sidebar, children, contentClassName }) => {
     return (
         <Container fluid className="layout">
             <Row>
                 <Col
-                    sm={4}
-                    md={4}
-                    lg={2}
+                    sm={sidebar.sidebarCollapsed ? 2 : 4}
+                    md={sidebar.sidebarCollapsed ? 2 : 4}
+                    lg={sidebar.sidebarCollapsed ? 1 : 2}
                     className="layout__sidebar"
                 >
                     <Sidebar />
                 </Col>
                 <Col
                     xs={12}
-                    sm={8}
-                    md={8}
-                    lg={10}
+                    sm={sidebar.sidebarCollapsed ? 10 : 8}
+                    md={sidebar.sidebarCollapsed ? 10 : 8}
+                    lg={sidebar.sidebarCollapsed ? 11 : 10}
                     className={`layout__content ${contentClassName}`}
                 >
                     <Row className="layout__navbar">
@@ -49,4 +50,8 @@ Layout.defaultProps = {
     contentClassName: '',
 };
 
-export default Layout;
+const mapStateToProps = state => ({
+    sidebar: state.sidebar,
+});
+
+export default connect(mapStateToProps)(Layout);
