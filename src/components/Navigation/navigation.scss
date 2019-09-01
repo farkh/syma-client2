@@ -1,3 +1,24 @@
+.navbar {
+    height: 56px;
+    background: #ffffff;
+    border-bottom: 1px solid #1B1026;
+    
+    &__link {
+        color: #222222;
+
+        &:hover {
+            color: #222222;
+        }
+        
+        &--active {
+            text-decoration: underline;
+        }
+    }
+    &__link + &__link {
+        margin-left: 20px;
+    }
+}
+
 .user-dropdown {
     &__toggle {
         display: flex;
