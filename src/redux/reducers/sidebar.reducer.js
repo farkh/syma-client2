@@ -4,7 +4,7 @@ import {
 } from '../types/sidebar.types';
 
 const initialState = {
-	sidebarCollapsed: false,
+	sidebarCollapsed: localStorage.getItem('SidebarCollapsed') === 'true',
 };
 
 const sidebarReducer = (state = initialState, action) => {

@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Alert } from 'react-bootstrap';
 
-import Layout from '../Layout/Layout';
-import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
+import Layout from '../../components/Layout/Layout';
+import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
 
 import {
     fetchUserSettingsAction,

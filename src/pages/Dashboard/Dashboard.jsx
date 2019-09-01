@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Layout from '../Layout/Layout';
+import Layout from '../../components/Layout/Layout';
 
 const Home = (props) => {
     const { authState } = props;
@@ -14,7 +14,7 @@ const Home = (props) => {
     );
     
     return (
-        <Layout>
+        <Layout contentClassName="dashboard">
             <h1>Logged in!</h1>
         </Layout>
     );

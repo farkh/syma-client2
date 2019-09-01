@@ -1,5 +1,5 @@
 export default {
-    HOME: '/',
+    DASHBOARD: '/dashboard',
     AUTH: '/auth',
     LOGOUT: '/logout',
     CALENDAR: '/calendar',
