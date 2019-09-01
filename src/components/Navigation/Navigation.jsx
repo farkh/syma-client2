@@ -22,9 +22,7 @@ const Navigation = (props) => {
     };
     
     return (
-        <Navbar fixed="top" bg="dark" variant="dark">
-            <NavLink to={routes.HOME}><Navbar.Brand>SYMA</Navbar.Brand></NavLink>
-
+        <Navbar variant="light">
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <NavLink

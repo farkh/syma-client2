@@ -1,20 +1,23 @@
-.content {
-    padding-top: 100px;
-}
-
-.navbar {
-    &__link {
-        color: #ffffff;
-
-        &:hover {
-            color: #ffffff;
-        }
-        
-        &--active {
-            text-decoration: underline;
-        }
+.layout {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    
+    &__navbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
     }
-    &__link + &__link {
-        margin-left: 20px;
+    
+    &__content {
+        padding: 66px 20px;
+        position: relative;
+        box-shadow: -8px 0px 15px -6px rgba(0, 0, 0, 0.75);
+    }
+    
+    &__sidebar {
+        padding-left: 0;
+        padding-right: 0;
     }
 }
